@@ -1,0 +1,7 @@
+Register page:
+
+now give me the angular standalone version code as shown ui in the image and the informaction Frontend: Registration ▸ ng generate component auth/register ▸ Reactive FormGroup: fullName, email, password, confirmPassword ▸ Validators: required, email format, minLength(8), custom passwordMatch ▸ AuthService.register() via HttpClient; display 201 success or 400 field errors
+My angular standalone version never make the component name like this register.component.ts 
+it is makeing it like this register.ts so give me code according to that
+
+ 

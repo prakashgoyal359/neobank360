@@ -1,0 +1,85 @@
+1) Problem in builder
+
+🔍 Your Problem
+
+From your table:
+
+role       → NULL ❌  
+is_active  → 0 ❌  
+created_at → NULL ❌  
+
+But your schema says:
+
+role → DEFAULT 'CUSTOMER'
+is_active → DEFAULT TRUE
+created_at → DEFAULT CURRENT_TIMESTAMP
+
+👉 So why not applied? 🤔
+
+🔥 Main Reason (IMPORTANT)
+
+👉 MySQL DEFAULT values work ONLY when you DON’T send the column
+
+But in your case:
+
+JPA is sending values explicitly
+Even if null → DB default is ignored ❌
+💥 What is happening internally
+
+Your entity:
+
+private Role role = Role.CUSTOMER;
+private boolean isActive = true;
+private LocalDateTime createdAt = LocalDateTime.now();
+
+BUT when you use:
+
+User.builder()
+
+👉 Builder does NOT always apply default values unless set manually.
+
+So Hibernate sends:
+
+role = NULL
+is_active = false (0)
+created_at = NULL
+✅ Fix 1 (BEST PRACTICE — RECOMMENDED)
+
+Set values explicitly in service:
+
+User user = User.builder()
+        .fullName(request.getFullName())
+        .email(request.getEmail())
+        .password(passwordEncoder.encode(request.getPassword()))
+        .role(Role.CUSTOMER)              // ✅ FIX
+        .isActive(true)                   // ✅ FIX
+        .createdAt(LocalDateTime.now())   // ✅ FIX
+        .build();
+
+
+
+2) Dark mode proble in style.css
+
+erro in style.css 
+'@tailwind components' is no longer available in v4. Use '@tailwind utilities' instead.
+
+Good catch 👏 — this error happens because you’re using Tailwind CSS v4, and v4 changed how directives work.
+
+❌ Your Error
+'@tailwind components' is no longer available in v4
+
+👉 In Tailwind v4:
+
+@tailwind components ❌ removed
+New simplified system ✅
+✅ Fix (Tailwind v4 Correct Setup)
+🔧 Update your styles.css
+
+Replace this ❌:
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+✅ With this (v4 correct):
+@import "tailwindcss";
