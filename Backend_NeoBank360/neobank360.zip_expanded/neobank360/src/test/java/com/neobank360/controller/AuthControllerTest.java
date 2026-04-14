@@ -80,14 +80,22 @@ public class AuthControllerTest {
         request.setEmail("test@gmail.com");
         request.setPassword("Password@123");
 
-        when(jwtUtil.generateToken(request.getEmail()))
+        // ✅ Mock user with role
+        var user = new com.neobank360.entity.User();
+        user.setEmail("test@gmail.com");
+        user.setRole(com.neobank360.entity.Role.ADMIN);
+
+        when(userService.getUserByEmail(request.getEmail()))
+                .thenReturn(user);
+
+        // ✅ Mock JWT with 2 params
+        when(jwtUtil.generateToken(anyString(), anyString()))
                 .thenReturn("mock-token");
 
         ResponseEntity<?> response = authController.login(request);
 
         assertEquals(200, response.getStatusCode().value());
 
-        // 🔥 Extract token from Map
         Map<?, ?> body = (Map<?, ?>) response.getBody();
 
         assertNotNull(body);

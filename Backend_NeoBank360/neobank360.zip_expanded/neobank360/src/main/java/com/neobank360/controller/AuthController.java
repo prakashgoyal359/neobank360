@@ -42,8 +42,10 @@ public class AuthController {
                         request.getPassword()
                 )
         );
+        
+        var user = userService.getUserByEmail(request.getEmail());
 
-        String token = jwtUtil.generateToken(request.getEmail());
+        String token = jwtUtil.generateToken(request.getEmail(),user.getRole().name());
 
         return ResponseEntity.ok().body(java.util.Map.of("token", token));
     }

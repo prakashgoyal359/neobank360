@@ -8,6 +8,7 @@ import com.neobank360.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,4 +50,31 @@ public class UserService {
                 .message("User registered successfully")
                 .build();
     }
+    
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+    
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+    
+    public User updateUser(String email, User updatedUser) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // ✅ Update fields
+        user.setFullName(updatedUser.getFullName());
+        user.setEmail(updatedUser.getEmail());
+
+        // ⚠️ Optional: update password (only if provided)
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
+
+        return userRepository.save(user);
+    }
+    
 }

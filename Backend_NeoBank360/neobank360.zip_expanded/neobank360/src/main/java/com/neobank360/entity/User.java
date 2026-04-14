@@ -30,7 +30,7 @@ public class User {
     private Role role = Role.CUSTOMER;
 
     @Column(name = "is_active")
-    private boolean isActive = true;
+    private Boolean isActive;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();

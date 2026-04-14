@@ -44,7 +44,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // ✅ Public endpoints (NO AUTH REQUIRED)
                 .requestMatchers("/api/auth/**").permitAll()
-
+                
+                .requestMatchers("/api/users/**").authenticated() 
                 // ✅ Admin endpoints
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
