@@ -2,36 +2,45 @@ package com.neobank360.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    private String firstName;
+    private String lastName;
+    private String gender;
+
+    @Column(unique = true)
     private String email;
 
-    @Column(name = "password_hash", nullable = false)
+    private String address;
+    private String accountType;
+
+    @Column(unique = true)
+    private String mobileNumber;
+
+    @Column(unique = true)
+    private String panNumber;
+
+    @Column(unique = true)
+    private String aadharNumber;
+
+    @Column(unique = true)
+    private String username;
+
     private String password;
 
-    @Column(name = "full_name", nullable = false)
-    private String fullName;
+    @Column(unique = true)
+    private String accountNumber;
 
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.CUSTOMER;
-
-    @Column(name = "is_active")
-    private Boolean isActive;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private String role;
 }

@@ -3,11 +3,11 @@ package com.neobank360.controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/admin")
-public class AdminController {
+@RequestMapping("/api/customer")
+public class CustomerController {
 
     @GetMapping("/dashboard")
-    public String admin() {
-        return "Welcome Admin";
+    public String customer() {
+        return "Welcome Customer";
     }
 }
