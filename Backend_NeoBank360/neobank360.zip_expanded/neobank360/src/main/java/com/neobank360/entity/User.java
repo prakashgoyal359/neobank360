@@ -23,6 +23,8 @@ public class User {
     private String email;
 
     private String address;
+    
+    @Column(name = "account_type")
     private String accountType;
 
     @Column(unique = true)
@@ -43,4 +45,6 @@ public class User {
     private String accountNumber;
 
     private String role;
+    
+    private double balance;
 }

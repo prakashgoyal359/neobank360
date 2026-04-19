@@ -53,12 +53,10 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public Map<String, String> login(@RequestBody LoginRequest req) {
+    public Map<String, Object> login(@RequestBody LoginRequest req) {
+    	
+        return authService.login(req);
 
-        String token = authService.login(req);
-
-        return Map.of(
-            "token", token
-        );
+        
     }
 }

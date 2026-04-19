@@ -6,6 +6,9 @@ import com.neobank360.repository.UserRepository;
 import com.neobank360.util.GeneratorUtil;
 import com.neobank360.security.JwtUtil;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,13 @@ public class AuthService {
 
         String username;
         String accNo;
+        
+        // ACCOUNT TYPE VALIDATION (ADD HERE)
+        List<String> allowed = List.of("SAVINGS", "CURRENT", "SALARY");
+
+        if (!allowed.contains(req.getAccountType())) {
+            throw new RuntimeException("Invalid Account Type ❌");
+        }
 
         do {
             username = GeneratorUtil.generateUsername(req.getFirstName());
@@ -47,21 +57,32 @@ public class AuthService {
                 .aadharNumber(req.getAadharNumber())
                 .username(username)
                 .accountNumber(accNo)
+                .balance(0)
                 .password(encoder.encode(req.getPassword()))
                 .role("CUSTOMER")
                 .build();
-
+        		
         repo.save(user);
 
         return "Username: " + username + "\nAccount: " + accNo;
     }
 
-    public String login(LoginRequest req) {
+    public Map<String, Object> login(LoginRequest req) {
 
+        // ✅ ADMIN LOGIN
         if (req.getUsername().equals("admin") && req.getPassword().equals("admin123")) {
-            return jwtUtil.generateToken("admin", "ADMIN");
+
+            String token = jwtUtil.generateToken("admin", "ADMIN");
+
+            return Map.of(
+                "token", token,
+                "username", "admin",
+                "role", "ADMIN",
+                "accountType", "ADMIN"
+            );
         }
 
+        // ✅ CUSTOMER LOGIN
         User user = repo.findByUsername(req.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -69,6 +90,13 @@ public class AuthService {
             throw new RuntimeException("Invalid password");
         }
 
-        return jwtUtil.generateToken(user.getUsername(), user.getRole());
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
+
+        return Map.of(
+            "token", token,
+            "username", user.getUsername(),
+            "role", user.getRole(),
+            "accountType", user.getAccountType() // ✅ IMPORTANT
+        );
     }
 }
