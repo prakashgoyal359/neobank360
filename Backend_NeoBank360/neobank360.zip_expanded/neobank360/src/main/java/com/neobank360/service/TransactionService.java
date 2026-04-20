@@ -5,6 +5,7 @@ import com.neobank360.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -43,5 +44,10 @@ public class TransactionService {
         txnRepo.save(txn);
 
         return Map.of("message", "Transfer Successful ✅");
+    }
+    
+    public List<Transaction> getTransactions(String username) {
+
+        return txnRepo.findBySenderOrReceiver(username, username);
     }
 }

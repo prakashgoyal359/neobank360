@@ -1,11 +1,13 @@
 package com.neobank360.controller;
 
 import com.neobank360.dto.TransferRequest;
+import com.neobank360.entity.Transaction;
 import com.neobank360.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,5 +26,11 @@ public class TransactionController {
                 req.getReceiverAccount(),
                 req.getAmount()
         );
+    }
+    
+    @GetMapping("/transactions")
+    public List<Transaction> getTransactions(Principal principal) {
+
+        return service.getTransactions(principal.getName());
     }
 }
