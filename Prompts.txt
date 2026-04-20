@@ -91,4 +91,6 @@ Username: admin
 Password: admin123
 
 
+ALTER TABLE users ADD COLUMN balance DOUBLE DEFAULT 0;
+
 
