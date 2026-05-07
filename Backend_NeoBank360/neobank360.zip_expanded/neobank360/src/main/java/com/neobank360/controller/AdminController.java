@@ -44,4 +44,33 @@ public class AdminController {
     public User createUser(@RequestBody User user) {
         return service.createUser(user);
     }
+    
+    @PutMapping("/approve/{id}")
+    public Map<String, String> approve(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> req
+    ) {
+
+        String username = service.approveUser(
+                id,
+                req.get("username"),
+                req.get("password")
+        );
+
+        return Map.of(
+                "message", "Approved ✅",
+                "username", username
+        );
+    }
+    
+    @PutMapping("/reject/{id}")
+    public Map<String, String> reject(
+            @PathVariable Long id
+    ) {
+
+        return Map.of(
+                "message",
+                service.rejectUser(id)
+        );
+    }
 }

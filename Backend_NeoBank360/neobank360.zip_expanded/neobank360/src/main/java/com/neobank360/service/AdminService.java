@@ -1,8 +1,13 @@
 package com.neobank360.service;
 
 import com.neobank360.entity.User;
+
 import com.neobank360.repository.UserRepository;
+import com.neobank360.util.GeneratorUtil;
+
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +17,8 @@ import java.util.List;
 public class AdminService {
 
     private final UserRepository repo;
+  
+    private final PasswordEncoder encoder;
 
     // ✅ GET ALL USERS
     public List<User> getAllUsers() {
@@ -47,4 +54,45 @@ public class AdminService {
     public User createUser(User user) {
         return repo.save(user);
     }
+    
+    public String approveUser(
+            Long id,
+            String username,
+            String password
+    ) {
+
+        User user = repo.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+        user.setUsername(username);
+
+        user.setPassword(
+                encoder.encode(password)
+        );
+
+        user.setStatus("APPROVED");
+
+        user.setAccountNumber(
+                GeneratorUtil.generateAccountNumber()
+        );
+
+        user.setFirstLogin(true);
+
+        repo.save(user);
+
+        return username;
+    }
+    public String rejectUser(Long id) {
+
+        User user = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setStatus("REJECTED");
+
+        repo.save(user);
+
+        return "Rejected ❌";
+    }
+    
 }

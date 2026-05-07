@@ -16,12 +16,14 @@ public class User {
     private Long id;
 
     private String firstName;
+    private String middleName;
     private String lastName;
     private String gender;
 
     @Column(unique = true)
     private String email;
 
+    @Column(columnDefinition = "TEXT")
     private String address;
     
     @Column(name = "account_type")
@@ -46,5 +48,15 @@ public class User {
 
     private String role;
     
+    private String status;
+    
+    private Boolean kycVerified;
+    private Boolean firstLogin;
+    
     private double balance;
+    private String aadharFile;
+
+    private String panFile;
+
+    private String photoFile;
 }

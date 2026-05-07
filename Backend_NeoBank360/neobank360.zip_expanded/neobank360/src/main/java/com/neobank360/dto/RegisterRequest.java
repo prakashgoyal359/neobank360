@@ -5,6 +5,7 @@ import lombok.Data;
 public class RegisterRequest {
 
     private String firstName;
+    private String middleName;
     private String lastName;
     private String gender;
     private String email;
@@ -15,5 +16,4 @@ public class RegisterRequest {
     private String panNumber;
     private String aadharNumber;
 
-    private String password;
 }

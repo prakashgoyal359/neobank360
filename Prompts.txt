@@ -94,3 +94,96 @@ Password: admin123
 ALTER TABLE users ADD COLUMN balance DOUBLE DEFAULT 0;
 
 
+
+
+
+
+
+
+
+create database neobank_db;
+use neobank_db;
+DROP USER IF EXISTS 'neobank_user'@'localhost';
+
+GRANT ALL PRIVILEGES ON neobank_db.* TO 'neobank_user'@'localhost';
+FLUSH PRIVILEGES;
+CREATE USER 'neobank_user'@'localhost' IDENTIFIED BY 'NeoBank360#';
+
+
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    gender VARCHAR(10),
+
+    email VARCHAR(100) UNIQUE NOT NULL,
+    address VARCHAR(255),
+
+    account_type VARCHAR(50),
+
+    mobile_number VARCHAR(15) UNIQUE NOT NULL,
+    pan_number VARCHAR(20) UNIQUE NOT NULL,
+    aadhar_number VARCHAR(20) UNIQUE NOT NULL,
+
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+
+    role VARCHAR(20) DEFAULT 'CUSTOMER',
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE accounts (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    account_number VARCHAR(20) UNIQUE NOT NULL,
+    balance DECIMAL(15,2) DEFAULT 0.00,
+
+    user_id BIGINT,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+);
+
+select * from users;
+
+
+ALTER TABLE users ADD COLUMN status VARCHAR(20) DEFAULT 'PENDING';
+
+CREATE TABLE transactions (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    from_account VARCHAR(20),
+    to_account VARCHAR(20),
+
+    amount DECIMAL(15,2) NOT NULL,
+
+    type VARCHAR(20),       -- TRANSFER / DEPOSIT / WITHDRAW
+    status VARCHAR(20),     -- SUCCESS / FAILED
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO users (
+    first_name, last_name, gender, email, address,
+    account_type, mobile_number, pan_number, aadhar_number,
+    username, password, role
+) VALUES (
+    'Admin', 'User', 'NA', 'admin@bank.com', 'HQ',
+    'ADMIN', '+911234567890', 'ABCDE1234F', '000000000000',
+    'admin', '$2a$10$Dow1eZrQxZxwS3z5k9vN7eWZk6z0xWzFzQvZK0Zz1YkF0FQ9yYy6a', 'ADMIN'
+);
+
+ALTER TABLE users 
+ADD COLUMN kyc_verified BOOLEAN DEFAULT FALSE,
+ADD COLUMN first_login BOOLEAN DEFAULT TRUE;
+
+
+
+
+
+
